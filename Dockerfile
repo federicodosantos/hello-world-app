@@ -19,8 +19,6 @@ WORKDIR /app
 
 COPY --from=builder /app/bin ./bin
 
-COPY .env .
-
 EXPOSE 8000
 
 CMD [ "/app/bin" ]
