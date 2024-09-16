@@ -1,5 +1,5 @@
 # stage 1
-FROM golang:1.21.5 AS builder
+FROM golang:1.21-alpine3.20 AS builder
 
 WORKDIR /app
 
@@ -8,17 +8,16 @@ RUN go mod download
 
 COPY . .
 
-COPY ./cmd/main.go ./
-
-RUN CGO_ENABLED=0 GOOS=linux go build -o ./bin
+RUN CGO_ENABLED=0 GOOS=linux go build -o main ./cmd/main.go
 
 # stage 2
 FROM alpine:3.20
 
 WORKDIR /app
 
-COPY --from=builder /app/bin ./bin
+COPY --from=builder /app/main .
+COPY .env .
 
 EXPOSE 8000
 
-CMD [ "./bin" ]
+CMD [ "./main" ]
